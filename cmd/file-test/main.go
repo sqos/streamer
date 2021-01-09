@@ -8,7 +8,7 @@ import (
 
 func main() {
 	stream, id := streamer.NewStream(
-		"rtsp://admin:password@host.dyndns.org:447/Streaming/Channel/2", // URI of raw RTSP stream
+		"VID_20180927_095629.mp4", // URI of raw RTSP stream
 		"videos",                                                        // Directory where to store video chunks and indexes. Should exist already
 		true,                                                            // Indicates if stream should be keeping files after it is stopped or clean the directory
 		true,                                                            // Indicates if Audio should be enabled or not

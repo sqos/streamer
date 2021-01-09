@@ -2,3 +2,5 @@ logs
 videos
 */uri-test
 */file-test
+.DS_Store
+*.mp4

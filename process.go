@@ -54,11 +54,12 @@ func (p *Process) getHLSFlags() string {
 
 func (p *Process) spawnFile(path, FILE string) *exec.Cmd {
 	processCommands := []string{
-		"-y",
-		"-fflags",
-		"nobuffer",
-		"-rtsp_transport",
-		"tcp",
+		//"-y",
+		//"-fflags",
+		//"gdigrab",
+		//"nobuffer",
+		//"-rtsp_transport",
+		//"tcp",
 		"-i",
 		FILE,
 		"-vsync",

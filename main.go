@@ -53,15 +53,6 @@ func NewStream(
 	waitTimeOut time.Duration,
 ) (*Stream, string) {
 	id := uuid.New().String()
-	path := fmt.Sprintf("%s/%s", storingDirectory, id)
-	err := os.MkdirAll(path, os.ModePerm)
-	if err != nil {
-		logrus.Error(err)
-		return nil, ""
-	}
-	process := NewProcess(keepFiles, audio)
-	cmd := process.Spawn(path, URI)
-
 	// Create nil pointer in case logging is not enabled
 	cmdLogger := (*lumberjack.Logger)(nil)
 	// Create logger otherwise
@@ -73,8 +64,19 @@ func NewStream(
 			MaxAge:     loggingOpts.MaxAge,
 			Compress:   loggingOpts.Compress,
 		}
-		cmd.Stderr = cmdLogger
-		cmd.Stdout = cmdLogger
+	}
+
+	path := fmt.Sprintf("%s/%s", storingDirectory, id)
+	err := os.MkdirAll(path, os.ModePerm)
+	if err != nil {
+		logrus.Error(err)
+		return nil, ""
+	}
+	process := NewProcess(keepFiles, audio, cmdLogger)
+	cmd := process.Spawn(path, URI)
+	if cmd == nil {
+		logrus.Error("spawn cmd fail")
+		return nil, ""
 	}
 	stream := Stream{
 		ID:        id,

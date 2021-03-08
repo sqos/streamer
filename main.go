@@ -43,6 +43,19 @@ type Stream struct {
 // Type check
 var _ IStream = (*Stream)(nil)
 
+// NewStreamWithId creates a new transcoding process for ffmpeg with spec id
+func NewStreamWithId(
+	id string,
+	URI string,
+	storingDirectory string,
+	keepFiles bool,
+	audio bool,
+	loggingOpts ProcessLoggingOpts,
+	waitTimeOut time.Duration,
+) (*Stream, string) {
+	return newStream(id, URI, storingDirectory, keepFiles, audio, loggingOpts, waitTimeOut)
+}
+
 // NewStream creates a new transcoding process for ffmpeg
 func NewStream(
 	URI string,
@@ -52,7 +65,22 @@ func NewStream(
 	loggingOpts ProcessLoggingOpts,
 	waitTimeOut time.Duration,
 ) (*Stream, string) {
-	id := uuid.New().String()
+	return newStream("", URI, storingDirectory, keepFiles, audio, loggingOpts, waitTimeOut)
+}
+
+// newStream creates a new transcoding process for ffmpeg
+func newStream(
+	id string,
+	URI string,
+	storingDirectory string,
+	keepFiles bool,
+	audio bool,
+	loggingOpts ProcessLoggingOpts,
+	waitTimeOut time.Duration,
+) (*Stream, string) {
+	if id == "" {
+		id = uuid.New().String()
+	}
 	// Create nil pointer in case logging is not enabled
 	cmdLogger := (*lumberjack.Logger)(nil)
 	// Create logger otherwise
